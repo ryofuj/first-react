@@ -1,11 +1,28 @@
-import * as React from 'react';
-import './style.css';
+import React, { useState, useRef } from 'react';
+import TodoList from './TodoList';
+import uuid from 'uuid/v4';
 
-export default function App() {
+function App() {
+  const [todos, setTodos] = useState([]);
+  const todoNameRef = useRef();
+  function handleAddTodo(e) {
+    const name = todoNameRef.current.value;
+    if (name === '') return;
+    setTodos((prevTodos) => {
+      return [...prevTodos, { id: uuid(), name: name, complete: false }];
+    });
+    todoNameRef.current.value = null;
+  }
+
   return (
-    <div>
-      <h1>Hello StackBlitz!</h1>
-      <p>Start editing to see some magic happen :)</p>
-    </div>
+    <>
+      <TodoList todos={todos} />
+      <input ref={todoNameRef} type="text" />
+      <button onClick={handleAddTodo}>Add Todo</button>
+      <button>Clear Complete</button>
+      <div>0 left Todo</div>
+    </>
   );
 }
+
+export default App;
